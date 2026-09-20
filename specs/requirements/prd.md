@@ -38,38 +38,38 @@ and handle disputes/refund escalations.
 ## User Stories
 
 1. As a Merchant, I want to register an account and submit my business/KYC
- details, so that I can start accepting payments.
+details, so that I can start accepting payments.
 2. As a Platform Admin, I want to review and approve or reject a merchant's
- onboarding application, so that only verified businesses can collect
- payments on the platform.
+onboarding application, so that only verified businesses can collect
+payments on the platform.
 3. As a Merchant, I want to generate a payment link or QR code for a specific
- amount, so that I can request payment for a sale.
+amount, so that I can request payment for a sale.
 4. As a Customer, I want to open a merchant's payment link/QR code and pay it
- using mobile money, so that I can complete a purchase without a bank
- account or card.
+using mobile money, so that I can complete a purchase without a bank
+account or card.
 5. As a Customer, I want to open a merchant's payment link/QR code and pay it
- using a card, so that I can complete a purchase with the payment method I
- already carry.
+using a card, so that I can complete a purchase with the payment method I
+already carry.
 6. As a Customer, I want to receive a confirmation of my payment, so that I
- have proof it went through.
+have proof it went through.
 7. As a Merchant, I want to see the status of a payment link/QR code (pending,
- paid, expired), so that I know whether a sale went through.
+paid, expired), so that I know whether a sale went through.
 8. As a Merchant, I want to view a running balance of funds I've collected, so
- that I know how much I can withdraw.
+that I know how much I can withdraw.
 9. As a Merchant, I want to view my full transaction history with filters (by
- date, status, payment method), so that I can reconcile my sales.
+date, status, payment method), so that I can reconcile my sales.
 10. As a Merchant, I want to request a payout of my balance to a linked bank
- account or mobile money wallet, so that I can access my funds.
+account or mobile money wallet, so that I can access my funds.
 11. As a Merchant, I want to see the status and history of my payout requests,
- so that I know when to expect the money.
+so that I know when to expect the money.
 12. As a Merchant, I want to issue a refund to a customer for a completed
- payment, so that I can handle returns or mistaken charges.
+payment, so that I can handle returns or mistaken charges.
 13. As a Platform Admin, I want to view transactions and payouts across all
- merchants, so that I can monitor the health of the platform and spot
- issues.
+merchants, so that I can monitor the health of the platform and spot
+issues.
 14. As a Platform Admin, I want to review and resolve escalated disputes or
- failed payouts, so that merchants and customers get unresolved issues
- settled.
+failed payouts, so that merchants and customers get unresolved issues
+settled.
 
 ## Product Decisions
 
@@ -91,14 +91,14 @@ or a mobile money wallet — the same underlying provider integrations used
 for collection may serve payouts; confirmed at design time.
 - **Multi-country / multi-currency**: the platform operates across multiple
 African countries and each merchant transacts in the currency of its own
-country; no cross-country/cross-currency conversion is offered. *assumed*
+country; no cross-country/cross-currency conversion is offered.
 - **Payout approval**: a payout request is queued and processed automatically
 once the merchant's balance and linked payout destination are verified — no
 manual Platform Admin approval is required on the happy path (only
-escalated/failed payouts reach an admin, per story 14). *assumed*
+escalated/failed payouts reach an admin, per story 14).
 - **Refunds**: a Merchant can refund a completed payment in full, back to the
 original payment method, within a limited window after payment; the
-platform does not support partial refunds in this scope. *assumed*
+platform does not support partial refunds in this scope.
 - **Notifications**: customers receive payment confirmations and merchants
 receive payment/payout status updates via SMS and email. *assumed*
 - **KYC depth**: merchant onboarding collects standard business-identity
@@ -122,8 +122,8 @@ path in story 14.
 ## Open Questions
 
 1. Which specific mobile money networks and card processor(s), and in which
- countries, must the platform support at launch? Left open pending a
- concrete provider decision at design time.
+countries, must the platform support at launch? Left open pending a
+concrete provider decision at design time.
 
 ## Further Notes
 
