@@ -7,11 +7,55 @@
   "appPath": "merchant-webapp",
   "entrypoint": "deployment/web-application",
   "exposure": "internet",
-  "dependencies": [
-    { "kind": "component", "name": "payments-api" },
-    { "kind": "platform-resource", "name": "thunder-auth", "resourceType": "thunder-app" }
+  "stories": [
+    1,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
   ],
   "description": "The merchant-facing web app: sign up and KYC submission, generating payment links/QR codes, viewing transaction history, balance and payout status, requesting payouts and issuing refunds. It also serves the public, unauthenticated payment page a Customer opens from a payment link/QR code to pay via mobile money or card. Does not implement payment processing itself — it calls payments-api for everything.",
-  "stories": [1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-  "skillsPinned": ["wireframes", "react-webapp", "oxygen-ui-design-system", "thunder-authentication"]
+  "dependencies": [
+    {
+      "kind": "component",
+      "name": "payments-api",
+      "wiring": {
+        "endpoint": {
+          "component": "merchant-payments-african121-payments-api",
+          "name": "http",
+          "visibility": "project",
+          "envBindings": {
+            "address": "PAYMENTS_API_URL"
+          }
+        }
+      }
+    },
+    {
+      "kind": "platform-resource",
+      "name": "thunder-auth",
+      "resourceType": "thunder-app",
+      "wiring": {
+        "ref": "merchant-payments-2603782c",
+        "envBindings": {
+          "client_id": "THUNDER_AUTH_CLIENT_ID",
+          "issuer": "THUNDER_AUTH_ISSUER",
+          "jwks_url": "THUNDER_AUTH_JWKS_URL",
+          "resource": "THUNDER_AUTH_RESOURCE",
+          "scopes": "THUNDER_AUTH_SCOPES"
+        }
+      }
+    }
+  ],
+  "skillsPinned": [
+    "wireframes",
+    "react-webapp",
+    "oxygen-ui-design-system",
+    "thunder-authentication"
+  ]
 }

@@ -7,11 +7,47 @@
   "appPath": "admin-webapp",
   "entrypoint": "deployment/web-application",
   "exposure": "intranet",
-  "dependencies": [
-    { "kind": "component", "name": "payments-api" },
-    { "kind": "platform-resource", "name": "thunder-auth", "resourceType": "thunder-app" }
+  "stories": [
+    2,
+    13,
+    14
   ],
   "description": "The Platform Admin portal: reviewing and approving/rejecting merchant onboarding applications, monitoring transactions and payouts across all merchants, and resolving escalated disputes or failed payouts. Internal staff only — not reachable from the public internet. Does not implement any payment logic itself — it calls payments-api for everything.",
-  "stories": [2, 13, 14],
-  "skillsPinned": ["wireframes", "react-webapp", "oxygen-ui-design-system", "thunder-authentication"]
+  "dependencies": [
+    {
+      "kind": "component",
+      "name": "payments-api",
+      "wiring": {
+        "endpoint": {
+          "component": "merchant-payments-african121-payments-api",
+          "name": "http",
+          "visibility": "project",
+          "envBindings": {
+            "address": "PAYMENTS_API_URL"
+          }
+        }
+      }
+    },
+    {
+      "kind": "platform-resource",
+      "name": "thunder-auth",
+      "resourceType": "thunder-app",
+      "wiring": {
+        "ref": "merchant-payments-2603782c",
+        "envBindings": {
+          "client_id": "THUNDER_AUTH_CLIENT_ID",
+          "issuer": "THUNDER_AUTH_ISSUER",
+          "jwks_url": "THUNDER_AUTH_JWKS_URL",
+          "resource": "THUNDER_AUTH_RESOURCE",
+          "scopes": "THUNDER_AUTH_SCOPES"
+        }
+      }
+    }
+  ],
+  "skillsPinned": [
+    "wireframes",
+    "react-webapp",
+    "oxygen-ui-design-system",
+    "thunder-authentication"
+  ]
 }
