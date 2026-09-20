@@ -1,0 +1,627 @@
+{
+  "schemaVersion": 1,
+  "issue": 8,
+  "commit": "ebda40988ccd7bea640cfe1c6867ffcfd5d3d68d",
+  "generatedAt": "2026-09-20T05:37:51.348Z",
+  "playwrightVersion": "1.61.1",
+  "batches": [
+    {
+      "file": "2026-09-20T05-15-41-217Z.json",
+      "specs": 32
+    },
+    {
+      "file": "2026-09-20T05-26-22-408Z.json",
+      "specs": 6
+    },
+    {
+      "file": "2026-09-20T05-27-50-464Z.json",
+      "specs": 6
+    },
+    {
+      "file": "2026-09-20T05-28-24-187Z.json",
+      "specs": 4
+    },
+    {
+      "file": "2026-09-20T05-29-29-205Z.json",
+      "specs": 32
+    },
+    {
+      "file": "2026-09-20T05-36-59-726Z.json",
+      "specs": 3
+    }
+  ],
+  "totals": {
+    "e2e": {
+      "total": 32,
+      "pass": 6,
+      "fail": 26,
+      "notRun": 0
+    },
+    "manual": 4,
+    "scenario": 0
+  },
+  "criteria": [
+    {
+      "id": "AC-001-a",
+      "requirementId": "REQ-001",
+      "must": "A new Merchant can submit business name, owner name, country, currency and contact details",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-001-a.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 12017,
+      "failure": {
+        "message": "Error: no self-service sign-up affordance is offered on the identity provider's sign-in page, so a new Merchant has no way to create an account and reach the Onboarding form to submit business/KYC details\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - no self-service sign-up affordance is offered on the identity provider's sign-in page, so a new Merchant has no way to create an account and reach the Onboarding form to submit business/KYC details with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-001-a.spec.ts:4"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-001-b",
+      "requirementId": "REQ-001",
+      "must": "After submission the merchant's KYC status is pending",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-001-b.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 11938,
+      "failure": {
+        "message": "Error: expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-001-b.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-002-a",
+      "requirementId": "REQ-002",
+      "must": "A Platform Admin can see a list of merchants with pending KYC status",
+      "method": "e2e",
+      "status": "pass",
+      "spec": "tests/e2e/specs/AC-002-a.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 4608,
+      "failure": null,
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-002-b",
+      "requirementId": "REQ-002",
+      "must": "A Platform Admin can approve a pending merchant, setting its KYC status to approved",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-002-b.spec.ts",
+      "healed": true,
+      "healAttempts": 1,
+      "flaky": false,
+      "durationMs": 14545,
+      "failure": {
+        "message": "Error: expected at least one pending merchant row to approve, but the pending merchants list is empty - no Merchant has ever registered\n\nexpect(locator).not.toHaveCount(expected) failed\n\nLocator:  getByRole('row').filter({ has: getByRole('cell') })\nExpected: not 0\nReceived: 0\nTimeout:  10000ms\n\nCall log:\n  - expected at least one pending merchant row to approve, but the pending merchants list is empty - no Merchant has ever registered with timeout 10000ms\n  - waiting for getByRole('row').filter({ has: getByRole('cell') })\n    24 × locator resolved to 0 elements\n       - unexpected value \"0\"\n",
+        "location": "AC-002-b.spec.ts:6"
+      },
+      "batch": "2026-09-20T05-36-59-726Z.json"
+    },
+    {
+      "id": "AC-002-c",
+      "requirementId": "REQ-002",
+      "must": "A Platform Admin can reject a pending merchant, setting its KYC status to rejected",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-002-c.spec.ts",
+      "healed": true,
+      "healAttempts": 1,
+      "flaky": false,
+      "durationMs": 14422,
+      "failure": {
+        "message": "Error: expected at least one pending merchant row to reject, but the pending merchants list is empty - no Merchant has ever registered\n\nexpect(locator).not.toHaveCount(expected) failed\n\nLocator:  getByRole('row').filter({ has: getByRole('cell') })\nExpected: not 0\nReceived: 0\nTimeout:  10000ms\n\nCall log:\n  - expected at least one pending merchant row to reject, but the pending merchants list is empty - no Merchant has ever registered with timeout 10000ms\n  - waiting for getByRole('row').filter({ has: getByRole('cell') })\n    24 × locator resolved to 0 elements\n       - unexpected value \"0\"\n",
+        "location": "AC-002-c.spec.ts:6"
+      },
+      "batch": "2026-09-20T05-36-59-726Z.json"
+    },
+    {
+      "id": "AC-003-a",
+      "requirementId": "REQ-003",
+      "must": "A Merchant can create a payment link by entering an amount",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-003-a.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 11824,
+      "failure": {
+        "message": "Error: expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-003-a.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-003-b",
+      "requirementId": "REQ-003",
+      "must": "The generated payment link includes a shareable QR code or URL",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-003-b.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 11894,
+      "failure": {
+        "message": "Error: expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-003-b.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-004-a",
+      "requirementId": "REQ-004",
+      "must": "Opening a payment link shows the amount due and a mobile money payment option",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-004-a.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 12054,
+      "failure": {
+        "message": "Error: expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-004-a.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-004-b",
+      "requirementId": "REQ-004",
+      "must": "A Customer can complete payment via mobile money without holding a bank account or card",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-004-b.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 12053,
+      "failure": {
+        "message": "Error: expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-004-b.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-005-a",
+      "requirementId": "REQ-005",
+      "must": "Opening a payment link shows a card payment option",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-005-a.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 11903,
+      "failure": {
+        "message": "Error: expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-005-a.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-005-b",
+      "requirementId": "REQ-005",
+      "must": "A Customer can complete payment by entering card details",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-005-b.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 12117,
+      "failure": {
+        "message": "Error: expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-005-b.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-006-a",
+      "requirementId": "REQ-006",
+      "must": "After a successful payment the customer sees a payment confirmation",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-006-a.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 12468,
+      "failure": {
+        "message": "Error: expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-006-a.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-006-b",
+      "requirementId": "REQ-006",
+      "must": "The confirmation clearly serves as proof the payment went through",
+      "method": "manual",
+      "status": "manual",
+      "spec": null,
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 0,
+      "failure": null,
+      "batch": null
+    },
+    {
+      "id": "AC-007-a",
+      "requirementId": "REQ-007",
+      "must": "A newly created payment link shows status pending",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-007-a.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 30180,
+      "failure": {
+        "message": "Test timeout of 30000ms exceeded.",
+        "location": "AC-007-a.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-007-b",
+      "requirementId": "REQ-007",
+      "must": "A payment link that has been paid shows status paid",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-007-b.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 12073,
+      "failure": {
+        "message": "Error: expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-007-b.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-007-c",
+      "requirementId": "REQ-007",
+      "must": "A payment link past its validity shows status expired",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-007-c.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 12077,
+      "failure": {
+        "message": "Error: expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-007-c.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-008-a",
+      "requirementId": "REQ-008",
+      "must": "A Merchant can view their current available balance",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-008-a.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 12072,
+      "failure": {
+        "message": "Error: expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-008-a.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-008-b",
+      "requirementId": "REQ-008",
+      "must": "The balance increases when a payment to that merchant completes",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-008-b.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 12039,
+      "failure": {
+        "message": "Error: expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-008-b.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-009-a",
+      "requirementId": "REQ-009",
+      "must": "A Merchant can view a list of their own transactions",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-009-a.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 11935,
+      "failure": {
+        "message": "Error: expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-009-a.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-009-b",
+      "requirementId": "REQ-009",
+      "must": "The transaction list can be filtered by status",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-009-b.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 12095,
+      "failure": {
+        "message": "Error: expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-009-b.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-009-c",
+      "requirementId": "REQ-009",
+      "must": "The transaction list can be filtered by payment method",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-009-c.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 12002,
+      "failure": {
+        "message": "Error: expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-009-c.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-010-a",
+      "requirementId": "REQ-010",
+      "must": "A Merchant can request a payout specifying an amount and destination (bank or mobile wallet)",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-010-a.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 11829,
+      "failure": {
+        "message": "Error: expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-010-a.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-010-b",
+      "requirementId": "REQ-010",
+      "must": "A payout request cannot exceed the merchant's available balance",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-010-b.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 11998,
+      "failure": {
+        "message": "Error: expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-010-b.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-011-a",
+      "requirementId": "REQ-011",
+      "must": "A Merchant can view a list of their past payout requests with each one's status",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-011-a.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 12226,
+      "failure": {
+        "message": "Error: expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-011-a.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-012-a",
+      "requirementId": "REQ-012",
+      "must": "A Merchant can initiate a refund on a completed transaction",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-012-a.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 11974,
+      "failure": {
+        "message": "Error: expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-012-a.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-012-b",
+      "requirementId": "REQ-012",
+      "must": "A refund returns the full amount of the original payment to the original payment method",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-012-b.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 11953,
+      "failure": {
+        "message": "Error: expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-012-b.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-012-c",
+      "requirementId": "REQ-012",
+      "must": "The platform does not offer a partial refund amount option",
+      "method": "manual",
+      "status": "manual",
+      "spec": null,
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 0,
+      "failure": null,
+      "batch": null
+    },
+    {
+      "id": "AC-013-a",
+      "requirementId": "REQ-013",
+      "must": "A Platform Admin can view a list of transactions across all merchants",
+      "method": "e2e",
+      "status": "pass",
+      "spec": "tests/e2e/specs/AC-013-a.spec.ts",
+      "healed": true,
+      "healAttempts": 1,
+      "flaky": false,
+      "durationMs": 12885,
+      "failure": null,
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-013-b",
+      "requirementId": "REQ-013",
+      "must": "A Platform Admin can view a list of payouts across all merchants",
+      "method": "e2e",
+      "status": "pass",
+      "spec": "tests/e2e/specs/AC-013-b.spec.ts",
+      "healed": true,
+      "healAttempts": 1,
+      "flaky": false,
+      "durationMs": 5109,
+      "failure": null,
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-014-a",
+      "requirementId": "REQ-014",
+      "must": "A Platform Admin can view a list of open disputes/failed payouts",
+      "method": "e2e",
+      "status": "pass",
+      "spec": "tests/e2e/specs/AC-014-a.spec.ts",
+      "healed": true,
+      "healAttempts": 1,
+      "flaky": false,
+      "durationMs": 5364,
+      "failure": null,
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-014-b",
+      "requirementId": "REQ-014",
+      "must": "A Platform Admin can mark a dispute as resolved with resolution notes",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-014-b.spec.ts",
+      "healed": true,
+      "healAttempts": 1,
+      "flaky": false,
+      "durationMs": 15019,
+      "failure": {
+        "message": "Error: expected at least one open dispute row to resolve, but the disputes list is empty - no merchant/payout activity has ever occurred\n\nexpect(locator).not.toHaveCount(expected) failed\n\nLocator:  getByRole('row').filter({ has: getByRole('cell') })\nExpected: not 0\nReceived: 0\nTimeout:  10000ms\n\nCall log:\n  - expected at least one open dispute row to resolve, but the disputes list is empty - no merchant/payout activity has ever occurred with timeout 10000ms\n  - waiting for getByRole('row').filter({ has: getByRole('cell') })\n    24 × locator resolved to 0 elements\n       - unexpected value \"0\"\n",
+        "location": "AC-014-b.spec.ts:6"
+      },
+      "batch": "2026-09-20T05-36-59-726Z.json"
+    },
+    {
+      "id": "AC-015-a",
+      "requirementId": "REQ-015",
+      "must": "A Merchant must sign in before accessing merchant dashboard features",
+      "method": "e2e",
+      "status": "pass",
+      "spec": "tests/e2e/specs/AC-015-a.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 2617,
+      "failure": null,
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-015-b",
+      "requirementId": "REQ-015",
+      "must": "A Platform Admin must sign in before accessing the admin portal",
+      "method": "e2e",
+      "status": "pass",
+      "spec": "tests/e2e/specs/AC-015-b.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 4706,
+      "failure": null,
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-016-a",
+      "requirementId": "REQ-016",
+      "must": "A merchant's payment links and transactions are always denominated in that merchant's own currency",
+      "method": "manual",
+      "status": "manual",
+      "spec": null,
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 0,
+      "failure": null,
+      "batch": null
+    },
+    {
+      "id": "AC-017-a",
+      "requirementId": "REQ-017",
+      "must": "A valid payout request is not blocked awaiting manual Platform Admin approval",
+      "method": "e2e",
+      "status": "fail",
+      "spec": "tests/e2e/specs/AC-017-a.spec.ts",
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 11671,
+      "failure": {
+        "message": "Error: expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a\n\nexpect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - expected a self-service sign-up affordance on the identity provider's sign-in page (Merchant enrolment is declared self-service in specs/design/security.json) — see tests/validation/test-plan.md § AC-001-a with timeout 10000ms\n  - waiting for getByRole('button', { name: /sign up|create account|register/i }).or(getByRole('link', { name: /sign up|create account|register/i }))\n",
+        "location": "AC-017-a.spec.ts:5"
+      },
+      "batch": "2026-09-20T05-29-29-205Z.json"
+    },
+    {
+      "id": "AC-017-b",
+      "requirementId": "REQ-017",
+      "must": "Only a failed payout reaches the Platform Admin for resolution",
+      "method": "manual",
+      "status": "manual",
+      "spec": null,
+      "healed": false,
+      "healAttempts": 0,
+      "flaky": false,
+      "durationMs": 0,
+      "failure": null,
+      "batch": null
+    }
+  ]
+}
