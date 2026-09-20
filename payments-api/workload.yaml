@@ -1,0 +1,49 @@
+apiVersion: openchoreo.dev/v1alpha1
+metadata:
+  name: payments-api
+
+endpoints:
+  - name: http
+    type: HTTP
+    port: 9090
+    basePath: /
+    visibility:
+      - project
+      - internal
+      - external
+
+dependencies:
+  endpoints:
+    - project: internal-services
+      component: internal-payments
+      name: api
+      visibility: namespace
+      envBindings:
+        address: INTERNAL_PAYMENTS_URL
+    - project: internal-services
+      component: internal-sms
+      name: api
+      visibility: namespace
+      envBindings:
+        address: INTERNAL_SMS_URL
+    - project: internal-services
+      component: internal-email
+      name: api
+      visibility: namespace
+      envBindings:
+        address: INTERNAL_EMAIL_URL
+  resources:
+    - ref: merchant-payments-2603782c
+      envBindings:
+        client_id: THUNDER_AUTH_CLIENT_ID
+        issuer: THUNDER_AUTH_ISSUER
+        jwks_url: THUNDER_AUTH_JWKS_URL
+        resource: THUNDER_AUTH_RESOURCE
+        scopes: THUNDER_AUTH_SCOPES
+    - ref: merchant-payments-ebda5f89
+      envBindings:
+        dbname: PAYMENTS_DB_DBNAME
+        host: PAYMENTS_DB_HOST
+        password: PAYMENTS_DB_PASSWORD
+        port: PAYMENTS_DB_PORT
+        user: PAYMENTS_DB_USER
