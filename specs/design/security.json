@@ -1,0 +1,89 @@
+{
+  "version": 3,
+  "permissions": [
+    {
+      "resource": "merchants",
+      "component": "payments-api",
+      "description": "Merchant business profiles and KYC status",
+      "actions": [
+        { "handle": "manage", "description": "Create and update the caller's own merchant profile" },
+        { "handle": "read-all", "description": "Every merchant" },
+        { "handle": "review", "description": "Approve or reject a merchant's KYC application" }
+      ]
+    },
+    {
+      "resource": "payment-links",
+      "component": "payments-api",
+      "description": "Payment links / QR codes a merchant generates for a sale",
+      "actions": [
+        { "handle": "create", "description": "Generate a payment link for the caller's own account" },
+        { "handle": "read", "description": "The caller's own payment links" }
+      ]
+    },
+    {
+      "resource": "transactions",
+      "component": "payments-api",
+      "description": "Payments made against a merchant's payment links",
+      "actions": [
+        { "handle": "read", "description": "The caller's own transactions" },
+        { "handle": "read-all", "description": "Every transaction, across merchants" }
+      ]
+    },
+    {
+      "resource": "balance",
+      "component": "payments-api",
+      "description": "A merchant's running collected balance",
+      "actions": [
+        { "handle": "read", "description": "The caller's own balance" }
+      ]
+    },
+    {
+      "resource": "payouts",
+      "component": "payments-api",
+      "description": "Withdrawals of a merchant's balance to a bank account or mobile wallet",
+      "actions": [
+        { "handle": "create", "description": "Request a payout for the caller's own balance" },
+        { "handle": "read", "description": "The caller's own payout requests" },
+        { "handle": "read-all", "description": "Every payout, across merchants" },
+        { "handle": "resolve", "description": "Resolve a failed payout" }
+      ]
+    },
+    {
+      "resource": "refunds",
+      "component": "payments-api",
+      "description": "Refunds of a completed transaction",
+      "actions": [
+        { "handle": "create", "description": "Refund one of the caller's own completed transactions" }
+      ]
+    },
+    {
+      "resource": "disputes",
+      "component": "payments-api",
+      "description": "Escalated failed payouts or complaints",
+      "actions": [
+        { "handle": "read-all", "description": "Every dispute" },
+        { "handle": "resolve", "description": "Resolve a dispute" }
+      ]
+    }
+  ],
+  "groups": [],
+  "roles": [
+    {
+      "name": "Merchant",
+      "description": "Registers a business, generates payment links, tracks its own transactions and balance, and requests payouts and refunds.",
+      "stories": [1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      "grants": ["merchants:manage", "payment-links:create", "payment-links:read", "transactions:read", "balance:read", "payouts:create", "payouts:read", "refunds:create"],
+      "enrolment": "self-service"
+    },
+    {
+      "name": "PlatformAdmin",
+      "description": "Reviews merchant onboarding, monitors transactions and payouts platform-wide, and resolves disputes and failed payouts.",
+      "stories": [2, 13, 14],
+      "grants": ["merchants:read-all", "merchants:review", "transactions:read-all", "payouts:read-all", "payouts:resolve", "disputes:read-all", "disputes:resolve"],
+      "assignTo": ["PlatformAdmins"]
+    }
+  ],
+  "testUsers": [
+    { "username": "test-platform-admin", "roles": ["PlatformAdmin"] }
+  ]
+}

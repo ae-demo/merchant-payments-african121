@@ -1,0 +1,17 @@
+{
+  "name": "admin-webapp",
+  "type": "web-application",
+  "version": "0.1.0",
+  "language": "TypeScript",
+  "buildpack": "docker",
+  "appPath": "admin-webapp",
+  "entrypoint": "deployment/web-application",
+  "exposure": "intranet",
+  "dependencies": [
+    { "kind": "component", "name": "payments-api" },
+    { "kind": "platform-resource", "name": "thunder-auth", "resourceType": "thunder-app" }
+  ],
+  "description": "The Platform Admin portal: reviewing and approving/rejecting merchant onboarding applications, monitoring transactions and payouts across all merchants, and resolving escalated disputes or failed payouts. Internal staff only — not reachable from the public internet. Does not implement any payment logic itself — it calls payments-api for everything.",
+  "stories": [2, 13, 14],
+  "skillsPinned": ["wireframes", "react-webapp", "oxygen-ui-design-system", "thunder-authentication"]
+}

@@ -1,0 +1,688 @@
+openapi: 3.0.3
+info:
+  title: Payments API
+  version: 0.1.0
+servers:
+  - url: /
+security:
+  - oauth2: []
+paths:
+  /health:
+    get:
+      operationId: getHealth
+      summary: Liveness check
+      security: []
+      responses:
+        '200':
+          description: service is healthy
+
+  /me/merchant:
+    get:
+      operationId: getMyMerchant
+      summary: The caller's own merchant profile
+      security:
+        - oauth2: [merchants:manage]
+      responses:
+        '200':
+          description: the caller's merchant profile
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Merchant' }
+        '404':
+          description: no merchant profile yet
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+    put:
+      operationId: upsertMyMerchant
+      summary: Create or update the caller's own merchant profile and KYC details
+      security:
+        - oauth2: [merchants:manage]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/MerchantInput' }
+      responses:
+        '200':
+          description: merchant profile saved
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Merchant' }
+        '400':
+          description: invalid input
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /merchants:
+    get:
+      operationId: listMerchants
+      summary: Every merchant, optionally filtered by KYC status
+      security:
+        - oauth2: [merchants:read-all]
+      parameters:
+        - name: kycStatus
+          in: query
+          schema: { type: string, enum: [pending, approved, rejected] }
+          description: filter by KYC status
+        - name: limit
+          in: query
+          schema: { type: integer, default: 20, maximum: 100 }
+        - name: offset
+          in: query
+          schema: { type: integer, default: 0 }
+      responses:
+        '200':
+          description: page of merchants
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MerchantPage' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /merchants/{merchantId}:
+    parameters:
+      - name: merchantId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      operationId: getMerchant
+      summary: Any merchant by id
+      security:
+        - oauth2: [merchants:read-all]
+      responses:
+        '200':
+          description: the merchant
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Merchant' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /merchants/{merchantId}/approve:
+    parameters:
+      - name: merchantId
+        in: path
+        required: true
+        schema: { type: string }
+    post:
+      operationId: approveMerchant
+      summary: Approve a merchant's KYC application
+      security:
+        - oauth2: [merchants:review]
+      responses:
+        '200':
+          description: merchant approved
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Merchant' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /merchants/{merchantId}/reject:
+    parameters:
+      - name: merchantId
+        in: path
+        required: true
+        schema: { type: string }
+    post:
+      operationId: rejectMerchant
+      summary: Reject a merchant's KYC application
+      security:
+        - oauth2: [merchants:review]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reason]
+              properties:
+                reason: { type: string }
+      responses:
+        '200':
+          description: merchant rejected
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Merchant' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /me/payment-links:
+    get:
+      operationId: listMyPaymentLinks
+      summary: The caller's own payment links
+      security:
+        - oauth2: [payment-links:read]
+      parameters:
+        - name: status
+          in: query
+          schema: { type: string, enum: [pending, paid, expired] }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 20, maximum: 100 }
+        - name: offset
+          in: query
+          schema: { type: integer, default: 0 }
+      responses:
+        '200':
+          description: page of the caller's payment links
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PaymentLinkPage' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      operationId: createMyPaymentLink
+      summary: Generate a payment link/QR code for a sale
+      security:
+        - oauth2: [payment-links:create]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PaymentLinkInput' }
+      responses:
+        '201':
+          description: payment link created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PaymentLink' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+
+  /me/payment-links/{linkId}:
+    parameters:
+      - name: linkId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      operationId: getMyPaymentLink
+      summary: One of the caller's own payment links, with its status
+      security:
+        - oauth2: [payment-links:read]
+      responses:
+        '200':
+          description: the payment link
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PaymentLink' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /payment-links/{linkId}:
+    parameters:
+      - name: linkId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      operationId: getPaymentLink
+      summary: A payment link's public details, for the customer paying it
+      security: []
+      responses:
+        '200':
+          description: the payment link's public details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PaymentLinkPublic' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /payment-links/{linkId}/pay:
+    parameters:
+      - name: linkId
+        in: path
+        required: true
+        schema: { type: string }
+    post:
+      operationId: payPaymentLink
+      summary: Pay a payment link via mobile money or card
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PaymentRequest' }
+      responses:
+        '201':
+          description: transaction created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Transaction' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /me/transactions:
+    get:
+      operationId: listMyTransactions
+      summary: The caller's own transactions
+      security:
+        - oauth2: [transactions:read]
+      parameters:
+        - name: status
+          in: query
+          schema: { type: string, enum: [pending, completed, failed] }
+        - name: method
+          in: query
+          schema: { type: string, enum: [mobile-money, card] }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 20, maximum: 100 }
+        - name: offset
+          in: query
+          schema: { type: integer, default: 0 }
+      responses:
+        '200':
+          description: page of the caller's transactions
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TransactionPage' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /transactions:
+    get:
+      operationId: listTransactions
+      summary: Every transaction, across merchants
+      security:
+        - oauth2: [transactions:read-all]
+      parameters:
+        - name: merchantId
+          in: query
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 20, maximum: 100 }
+        - name: offset
+          in: query
+          schema: { type: integer, default: 0 }
+      responses:
+        '200':
+          description: page of transactions
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TransactionPage' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /me/transactions/{transactionId}/refund:
+    parameters:
+      - name: transactionId
+        in: path
+        required: true
+        schema: { type: string }
+    post:
+      operationId: refundMyTransaction
+      summary: Refund one of the caller's own completed transactions, in full
+      security:
+        - oauth2: [refunds:create]
+      responses:
+        '201':
+          description: refund created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Refund' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /me/balance:
+    get:
+      operationId: getMyBalance
+      summary: The caller's own running balance
+      security:
+        - oauth2: [balance:read]
+      responses:
+        '200':
+          description: the caller's balance
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Balance' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /me/payouts:
+    get:
+      operationId: listMyPayouts
+      summary: The caller's own payout requests
+      security:
+        - oauth2: [payouts:read]
+      parameters:
+        - name: status
+          in: query
+          schema: { type: string, enum: [pending, paid, failed] }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 20, maximum: 100 }
+        - name: offset
+          in: query
+          schema: { type: integer, default: 0 }
+      responses:
+        '200':
+          description: page of the caller's payouts
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PayoutPage' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      operationId: createMyPayout
+      summary: Request a payout of the caller's balance to a bank account or mobile wallet
+      security:
+        - oauth2: [payouts:create]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PayoutInput' }
+      responses:
+        '201':
+          description: payout requested
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Payout' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+
+  /payouts:
+    get:
+      operationId: listPayouts
+      summary: Every payout, across merchants
+      security:
+        - oauth2: [payouts:read-all]
+      parameters:
+        - name: status
+          in: query
+          schema: { type: string, enum: [pending, paid, failed] }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 20, maximum: 100 }
+        - name: offset
+          in: query
+          schema: { type: integer, default: 0 }
+      responses:
+        '200':
+          description: page of payouts
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PayoutPage' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /payouts/{payoutId}/resolve:
+    parameters:
+      - name: payoutId
+        in: path
+        required: true
+        schema: { type: string }
+    post:
+      operationId: resolvePayout
+      summary: Resolve a failed payout, retrying or marking it settled
+      security:
+        - oauth2: [payouts:resolve]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [resolutionNotes]
+              properties:
+                resolutionNotes: { type: string }
+      responses:
+        '200':
+          description: payout resolved
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Payout' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /disputes:
+    get:
+      operationId: listDisputes
+      summary: Every dispute
+      security:
+        - oauth2: [disputes:read-all]
+      parameters:
+        - name: status
+          in: query
+          schema: { type: string, enum: [open, resolved] }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 20, maximum: 100 }
+        - name: offset
+          in: query
+          schema: { type: integer, default: 0 }
+      responses:
+        '200':
+          description: page of disputes
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DisputePage' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /disputes/{disputeId}/resolve:
+    parameters:
+      - name: disputeId
+        in: path
+        required: true
+        schema: { type: string }
+    post:
+      operationId: resolveDispute
+      summary: Resolve an escalated dispute
+      security:
+        - oauth2: [disputes:resolve]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [resolutionNotes]
+              properties:
+                resolutionNotes: { type: string }
+      responses:
+        '200':
+          description: dispute resolved
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Dispute' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: /oauth2/authorize
+          tokenUrl: /oauth2/token
+          scopes:
+            merchants:manage: Create and update the caller's own merchant profile
+            merchants:read-all: Every merchant
+            merchants:review: Approve or reject a merchant's KYC application
+            payment-links:create: Generate a payment link for the caller's own account
+            payment-links:read: The caller's own payment links
+            transactions:read: The caller's own transactions
+            transactions:read-all: Every transaction, across merchants
+            balance:read: The caller's own balance
+            payouts:create: Request a payout for the caller's own balance
+            payouts:read: The caller's own payout requests
+            payouts:read-all: Every payout, across merchants
+            payouts:resolve: Resolve a failed payout
+            refunds:create: Refund one of the caller's own completed transactions
+            disputes:read-all: Every dispute
+            disputes:resolve: Resolve a dispute
+  responses:
+    BadRequest:
+      description: invalid request
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Unauthorized:
+      description: missing or invalid token
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NotFound:
+      description: resource not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+  schemas:
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code: { type: integer, description: HTTP or application error code }
+        message: { type: string, description: short human-readable label }
+        description: { type: string, description: detailed explanation }
+        moreInfo: { type: string, description: URI to documentation }
+    Merchant:
+      type: object
+      required: [id, businessName, ownerName, country, currency, kycStatus, balance]
+      properties:
+        id: { type: string }
+        businessName: { type: string }
+        ownerName: { type: string }
+        country: { type: string }
+        currency: { type: string }
+        contactEmail: { type: string }
+        contactPhone: { type: string }
+        kycStatus: { type: string, enum: [pending, approved, rejected] }
+        balance: { type: integer, description: running balance in minor currency units }
+    MerchantInput:
+      type: object
+      required: [businessName, ownerName, country, currency, contactEmail, contactPhone]
+      properties:
+        businessName: { type: string }
+        ownerName: { type: string }
+        country: { type: string }
+        currency: { type: string }
+        contactEmail: { type: string }
+        contactPhone: { type: string }
+    MerchantPage:
+      type: object
+      required: [count, data]
+      properties:
+        count: { type: integer }
+        next: { type: string, nullable: true }
+        previous: { type: string, nullable: true }
+        data: { type: array, items: { $ref: '#/components/schemas/Merchant' } }
+    PaymentLink:
+      type: object
+      required: [id, merchantId, amount, currency, status, qrCodeUrl, createdAt]
+      properties:
+        id: { type: string }
+        merchantId: { type: string }
+        amount: { type: integer }
+        currency: { type: string }
+        status: { type: string, enum: [pending, paid, expired] }
+        qrCodeUrl: { type: string }
+        createdAt: { type: string, format: date-time }
+        expiresAt: { type: string, format: date-time, nullable: true }
+    PaymentLinkPublic:
+      type: object
+      required: [id, amount, currency, status, merchantName]
+      properties:
+        id: { type: string }
+        merchantName: { type: string }
+        amount: { type: integer }
+        currency: { type: string }
+        status: { type: string, enum: [pending, paid, expired] }
+    PaymentLinkInput:
+      type: object
+      required: [amount, currency]
+      properties:
+        amount: { type: integer }
+        currency: { type: string }
+        expiresAt: { type: string, format: date-time, nullable: true }
+    PaymentLinkPage:
+      type: object
+      required: [count, data]
+      properties:
+        count: { type: integer }
+        next: { type: string, nullable: true }
+        previous: { type: string, nullable: true }
+        data: { type: array, items: { $ref: '#/components/schemas/PaymentLink' } }
+    PaymentRequest:
+      type: object
+      required: [method]
+      properties:
+        method: { type: string, enum: [mobile-money, card] }
+        payerPhone: { type: string, description: required for mobile-money }
+        payerCardToken: { type: string, description: required for card }
+    Transaction:
+      type: object
+      required: [id, merchantId, paymentLinkId, method, amount, currency, status, createdAt]
+      properties:
+        id: { type: string }
+        merchantId: { type: string }
+        paymentLinkId: { type: string }
+        method: { type: string, enum: [mobile-money, card] }
+        amount: { type: integer }
+        currency: { type: string }
+        status: { type: string, enum: [pending, completed, failed] }
+        externalPaymentId: { type: string, nullable: true }
+        createdAt: { type: string, format: date-time }
+    TransactionPage:
+      type: object
+      required: [count, data]
+      properties:
+        count: { type: integer }
+        next: { type: string, nullable: true }
+        previous: { type: string, nullable: true }
+        data: { type: array, items: { $ref: '#/components/schemas/Transaction' } }
+    Refund:
+      type: object
+      required: [id, transactionId, amount, status, createdAt]
+      properties:
+        id: { type: string }
+        transactionId: { type: string }
+        amount: { type: integer }
+        status: { type: string, enum: [pending, completed, failed] }
+        createdAt: { type: string, format: date-time }
+    Balance:
+      type: object
+      required: [merchantId, amount, currency]
+      properties:
+        merchantId: { type: string }
+        amount: { type: integer }
+        currency: { type: string }
+    PayoutInput:
+      type: object
+      required: [amount, destinationType]
+      properties:
+        amount: { type: integer }
+        destinationType: { type: string, enum: [bank, mobile-wallet] }
+        bankAccountNumber: { type: string }
+        bankCode: { type: string }
+        mobileWalletNumber: { type: string }
+    Payout:
+      type: object
+      required: [id, merchantId, amount, currency, destinationType, status, createdAt]
+      properties:
+        id: { type: string }
+        merchantId: { type: string }
+        amount: { type: integer }
+        currency: { type: string }
+        destinationType: { type: string, enum: [bank, mobile-wallet] }
+        status: { type: string, enum: [pending, paid, failed] }
+        externalPayoutId: { type: string, nullable: true }
+        createdAt: { type: string, format: date-time }
+    PayoutPage:
+      type: object
+      required: [count, data]
+      properties:
+        count: { type: integer }
+        next: { type: string, nullable: true }
+        previous: { type: string, nullable: true }
+        data: { type: array, items: { $ref: '#/components/schemas/Payout' } }
+    Dispute:
+      type: object
+      required: [id, merchantId, subject, status, createdAt]
+      properties:
+        id: { type: string }
+        merchantId: { type: string }
+        payoutId: { type: string, nullable: true }
+        subject: { type: string }
+        status: { type: string, enum: [open, resolved] }
+        resolutionNotes: { type: string, nullable: true }
+        createdAt: { type: string, format: date-time }
+    DisputePage:
+      type: object
+      required: [count, data]
+      properties:
+        count: { type: integer }
+        next: { type: string, nullable: true }
+        previous: { type: string, nullable: true }
+        data: { type: array, items: { $ref: '#/components/schemas/Dispute' } }
